@@ -1,0 +1,45 @@
+{
+  "name": "img-editor",
+  "version": "0.0.1",
+  "description": "Compact image editing library",
+  "main": "./dist/lib/resize.js",
+  "bin": {
+    "resize-js": "./dist/index.js"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "predeploy": "npm run test && npm run build",
+    "deploy": "npm publish --access=public",
+    "test": "jest",
+    "test-c": "jest --coverage",
+    "build": "copyfiles -u 1 ./src/index.js dist/ && copyfiles -u 1 ./src/lib/**/* dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edward93/img-editor.git"
+  },
+  "keywords": [
+    "sharp",
+    "resize",
+    "images"
+  ],
+  "author": "Edward Chopuryan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edward93/img-editor/issues"
+  },
+  "homepage": "https://github.com/edward93/img-editor#readme",
+  "dependencies": {
+    "esm": "^3.2.25",
+    "fs-extra": "^10.1.0",
+    "glob": "^8.0.3",
+    "path": "^0.12.7",
+    "sharp": "^0.30.7",
+    "yargs": "^17.5.1"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1"
+  }
+}
