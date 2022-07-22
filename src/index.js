@@ -46,6 +46,40 @@ const argv = require("yargs")
       .help("h")
       .alias("h", "help");
   })
+  .command("resize", "regular resize", function (yargs) {
+    return yargs
+      .usage("$0 resize [options]")
+      .example("$0 resize -f ./img.png -w 25 -g")
+      .option("files", {
+        alias: "f",
+        describe: "file or glob",
+        demandOption: true,
+        type: "string",
+      })
+      .option("width", {
+        alias: "w",
+        describe: "width of the output image in pixels",
+        demandOption: false,
+        default: undefined,
+        type: "number",
+      })
+      .option("grayscale", {
+        alias: "g",
+        describe: "Convert to grayscale",
+        demandOption: false,
+        default: false,
+        type: "boolean",
+      })
+      .option("output", {
+        alias: "o",
+        describe: "Output folder",
+        demandOption: false,
+        default: ".",
+        type: "string",
+      })
+      .help("h")
+      .alias("h", "help");
+  })
   .help("h")
   .alias("h", "help")
   .epilog(`Copyright ${new Date().getFullYear()}`).argv;
@@ -71,7 +105,7 @@ if (argv._[0] === "frame") {
     }
   });
 } else if (argv._[0] === "resize") {
-  glob(argv.file, (err, files) => {
+  glob(argv.files, (err, files) => {
     if (err) {
       console.error(err);
       return 1;

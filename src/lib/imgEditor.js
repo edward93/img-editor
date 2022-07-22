@@ -3,12 +3,15 @@ import path from "path";
 import fs from "fs-extra";
 
 /**
+ * This function adds a frame around the image to change the aspect ratio
+ * This is helpful when the image you are trying to print has different aspect ratio than the printer paper
  *
- * @param {string[]} files
- * @param {*} printPaperOptions
- * @param {*} frameOptions
- * @param {*} output
- * @param {number} frameWidthFactor
+ * @param {string[]} files - glob, file names
+ * @param {{printPaperWidth: number, printPaperHeigh}} printPaperOptions - information about the printing paper
+ * @param {{frameColor: string, imagePosition: {x: number, y: number}}} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
+ * @param {string} output - output folder
+ * @param {number} frameWidthFactor - width of the frame (smallest dimension x frameWidthFactor)
+ * @return True if successful
  */
 export const addFrame = async (
   files,
@@ -28,7 +31,7 @@ export const addFrame = async (
   )
     return false;
 
-  /** Create the folder if it doesn't exist */
+  // Create the output folder if it doesn't exist
   if (!fs.existsSync(output)) {
     fs.mkdirSync(output);
   }
@@ -37,10 +40,7 @@ export const addFrame = async (
   files.map(async (file) => {
     //#region prepping necessary data for processing the image
     // Construct the output file
-    const defaultFilename = `edited-${new Date().valueOf()}-${path.basename(file)}`;
-    const defaultOutputPath = `${path.dirname(file)}/${defaultFilename}`;
-
-    const outPath = output ? `${path.dirname(file)}/${output}/${defaultFilename}` : defaultOutputPath;
+    const outPath = constructOutputPath(file, output, OPERATION_CODES.addFrame);
 
     // get information about the current file
     const { width, height } = await sharp(file).metadata();
@@ -74,14 +74,88 @@ export const addFrame = async (
   });
 };
 
+/**
+ * Resizes given file(s) preserving the aspect ratio
+ *
+ * @param {string} files - file or glob
+ * @param {number} width - desired output file width
+ * @param {boolean} grayscale - if true img will be grayscaled
+ * @param {string} output - output folder
+ * @returns true if successful
+ */
+export const resize = async (files, width = undefined, grayscale = false, output = ".") => {
+  //#region argument checking
+  if (!files || (files && files.length === 0)) {
+    console.error("No files found");
+    return false;
+  }
+
+  if (width !== undefined && width !== null) {
+    if (isNaN(width)) {
+      console.error("Width must be a valid integer or (null | undefined)");
+      return false;
+    }
+
+    if (width <= 0) {
+      console.error("Width must be a valid integer (gt 0)");
+      return false;
+    }
+  } else if (grayscale === false) {
+    console.error("Either 'width' or 'grayscale' should be defined");
+    return false;
+  }
+  //#endregion
+
+  /** Create the folder if it doesn't exist */
+  if (!fs.existsSync(output)) {
+    fs.mkdirSync(output);
+  }
+
+  const result = { successfullyEdited: 0, failed: 0 };
+
+  // process each file
+  await files.map(async (file) => {
+    // Construct the output file
+    const outPath = constructOutputPath(file, output, OPERATION_CODES.resize);
+
+    // start construction of the processing command
+    let command = sharp(file);
+
+    // if width arg is provided, resize the image
+    if (width !== undefined && width !== null) {
+      command = command.resize({ width });
+    }
+
+    // if grayscale is provided grayscale the image
+    if (grayscale) {
+      command = command.grayscale();
+    }
+
+    // save to a file
+    try {
+      const info = await command.toFile(outPath);
+      console.info(info);
+      result.successfullyEdited++;
+      return true;
+    } catch (error) {
+      console.error(error);
+      result.failed++;
+      return false;
+    }
+  });
+
+  return result.failed === 0;
+};
+
 //#region private/helper methods
 /**
+ * Calculates necessary measurements of the frame
  *
- * @param {*} width
- * @param {*} height
- * @param {*} printPaperOptions
- * @param {*} frameWidthFactor
- * @returns
+ * @param {number} width
+ * @param {number} height
+ * @param {{printPaperWidth: number, printPaperHeigh}} printPaperOptions - information about the printing paper
+ * @param {{frameColor: string, imagePosition: {x: number, y: number}}} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
+ * @returns an object with top, lef, right, and bottom values
  */
 const calculateFrameSizes = (width, height, printPaperOptions, frameWidthFactor) => {
   const outputAspectRatio =
@@ -120,13 +194,15 @@ const calculateFrameSizes = (width, height, printPaperOptions, frameWidthFactor)
 
   return { top, left, right, bottom };
 };
+
 /**
+ * Check passed arguments and return true if they are valid
  *
- * @param {*} files
- * @param {*} printPaperOptions
- * @param {*} frameOptions
- * @param {*} output
- * @returns
+ * @param {string[]} files - glob, file names
+ * @param {{printPaperWidth: number, printPaperHeigh}} printPaperOptions - information about the printing paper
+ * @param {{frameColor: string, imagePosition: {x: number, y: number}}} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
+ * @param {string} output - output folder
+ * @returns True if arguments are OK
  */
 const checkArguments = (
   files,
@@ -153,4 +229,27 @@ const checkArguments = (
   } else return true;
 };
 
+/**
+ * Constructs the output file
+ *
+ * @param {string} file - input file name
+ * @param {string} output - output folder name
+ * @param {string} code - special op code for distinction
+ * @returns
+ */
+const constructOutputPath = (file, output, code) => {
+  // Construct the output file
+  const defaultFilename = `edited-${code}-${new Date().valueOf()}-${path.basename(file)}`;
+  const defaultOutputPath = `${path.dirname(file)}/${defaultFilename}`;
+
+  return output ? `${path.dirname(file)}/${output}/${defaultFilename}` : defaultOutputPath;
+};
+
+/**
+ * Operation codes
+ */
+const OPERATION_CODES = {
+  addFrame: "afr",
+  resize: "rsz",
+};
 //#endregion
