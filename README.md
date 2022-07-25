@@ -1,4 +1,6 @@
 # img-editor
+![npm (scoped)](https://img.shields.io/npm/v/@edward1993/img-editor?style=flat-square)
+![Build Status](https://github.com/edward93/img-editor/actions/workflows/npm-publish.yml/badge.svg)
 
 Compact library to edit images
 

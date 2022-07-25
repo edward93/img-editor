@@ -17,7 +17,7 @@ This is helpful when the image you are trying to print has different aspect rati
 <dd><p>Information about the printing paper</p>
 </dd>
 <dt><a href="#FrameOptionsType">FrameOptionsType</a> : <code>Object</code></dt>
-<dd><p>Information about the printing paper</p>
+<dd><p>Information about the frame</p>
 </dd>
 </dl>
 
@@ -68,7 +68,7 @@ Information about the printing paper
 <a name="FrameOptionsType"></a>
 
 ## FrameOptionsType : <code>Object</code>
-Information about the printing paper
+Information about the frame
 
 **Kind**: global typedef  
 **Properties**
