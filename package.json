@@ -17,7 +17,7 @@
     "build": "copyfiles -u 1 ./src/index.js dist/ && copyfiles -u 1 ./src/lib/**/* dist/",
     "gen-docs-html": "jsdoc --configure jsdoc.json --verbose",
     "gen-docs-md": "jsdoc2md src/lib/*.js > docs/md/api.md",
-    "predeploy": "npm run test && npm run docs && npm run build"
+    "predeploy": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
