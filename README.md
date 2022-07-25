@@ -7,13 +7,13 @@ _NOTE:_ This tool uses `sharp` for image manipulation. More info <a href="https:
 ## Install (CLI)
 
 ```bash
-npm i -g img-editor
+npm i -g @edward1993/img-editor
 ```
 
 ## Install (Module)
 
 ```bash
-npm i img-editor
+npm i @edward1993/img-editor
 ```
 
 ```js
