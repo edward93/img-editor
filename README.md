@@ -4,19 +4,62 @@ Compact library to edit images
 
 _NOTE:_ This tool uses `sharp` for image manipulation. More info <a href="https://github.com/lovell/sharp" target="blank">here</a>
 
-## Install
+## Install (CLI)
 
 ```bash
 npm i -g img-editor
 ```
 
+## Install (Module)
+
+```bash
+npm i img-editor
+```
+
+```js
+import { resize } from "img-editor/lib";
+```
+
 ## Usage
 
 ```bash
-# TODO: add the usage here
+# Resize images
+img-editor resize [options]
+
+Options:
+      --version    Show version number                                 [boolean]
+  -f, --files      file or glob                              [string] [required]
+  -w, --width      width of the output image in pixels                  [number]
+  -g, --grayscale  Convert to grayscale               [boolean] [default: false]
+  -o, --output     Output folder                         [string] [default: "."]
+  -h, --help       Show help                                           [boolean]
+
+Examples:
+  img-editor resize -f ./img.png -w 25 -g
+
+Copyright 2022 - Present
+
+# Add a frame
+img-editor frame [options]
+
+Options:
+      --version            Show version number                         [boolean]
+  -f, --files              files or glob                     [string] [required]
+  -w, --paperWidth         printing paper width          [number] [default: "4"]
+      --paperHeight, --ph  printing paper height         [number] [default: "6"]
+  -c, --frameColor         frame color, i.e. "#fff"     [string] [default: "#fff"]
+  -o, --output             Output folder                 [string] [default: "."]
+  -h, --help               Show help                                   [boolean]
+
+Examples:
+  img-editor frame -f ./img.png
+
+Copyright 2022 - Present
 ```
 
-###
+### Documentation
+
+- API docs [here](docs/md/api.md)
 
 ## Limitations
 

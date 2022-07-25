@@ -44,7 +44,8 @@ const argv = require("yargs")
         type: "string",
       })
       .help("h")
-      .alias("h", "help");
+      .alias("h", "help")
+      .epilog(`Copyright 2022 - Present`);
   })
   .command("resize", "regular resize", function (yargs) {
     return yargs
@@ -78,11 +79,12 @@ const argv = require("yargs")
         type: "string",
       })
       .help("h")
-      .alias("h", "help");
+      .alias("h", "help")
+      .epilog(`Copyright 2022 - Present`);
   })
   .help("h")
   .alias("h", "help")
-  .epilog(`Copyright ${new Date().getFullYear()}`).argv;
+  .epilog(`Copyright 2022 - Present`).argv;
 
 // console.log(argv);
 //TODO: refactor this to make it more readable and better

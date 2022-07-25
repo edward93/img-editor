@@ -1,0 +1,19 @@
+{
+  "source": {
+    "include": ["src/lib", "package.json", "README.md"],
+    "includePattern": ".js$"
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": true,
+    "useLongnameInNav": false,
+    "showInheritedInNav": true
+  },
+  "opts": {
+    "destination": "./docs/html/",
+    "encoding": "utf8",
+    "private": false,
+    "recurse": true,
+    "template": "./node_modules/minami"
+  }
+}
