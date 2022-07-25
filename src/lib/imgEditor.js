@@ -9,7 +9,7 @@ import fs from "fs-extra";
  */
 
 /**
- * @typedef {Object} FrameOptionsType - Information about the printing paper
+ * @typedef {Object} FrameOptionsType - Information about the frame
  * @property {string} frameColor - Width of the printing paper
  * @property {object} imagePosition - Position of the image
  */
