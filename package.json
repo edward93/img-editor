@@ -1,10 +1,10 @@
 {
-  "name": "img-editor",
+  "name": "@edward1993/img-editor",
   "version": "1.0.0",
   "description": "Compact image editing library",
-  "main": "./dist/lib/resize.js",
+  "main": "./dist/lib/imgEditor.js",
   "bin": {
-    "resize-js": "./dist/index.js"
+    "img-editor": "./dist/index.js"
   },
   "files": [
     "dist/**/*"
