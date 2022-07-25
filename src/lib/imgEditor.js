@@ -3,12 +3,24 @@ import path from "path";
 import fs from "fs-extra";
 
 /**
- * This function adds a frame around the image to change the aspect ratio
+ * @typedef {Object} PrintPaperOptionsType - Information about the printing paper
+ * @property {number} printPaperWidth - Width of the printing paper
+ * @property {number} printPaperHeigh - Height of the printing paper
+ */
+
+/**
+ * @typedef {Object} FrameOptionsType - Information about the printing paper
+ * @property {string} frameColor - Width of the printing paper
+ * @property {object} imagePosition - Position of the image
+ */
+
+/**
+ * This function adds a frame around the image to change the aspect ratio. </br>
  * This is helpful when the image you are trying to print has different aspect ratio than the printer paper
  *
  * @param {string[]} files - glob, file names
- * @param {{printPaperWidth: number, printPaperHeigh: number}} printPaperOptions - information about the printing paper
- * @param {{frameColor: string, imagePosition: {x: number, y: number}}} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
+ * @param {PrintPaperOptionsType} printPaperOptions - information about the printing paper
+ * @param {FrameOptionsType} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
  * @param {string} output - output folder
  * @param {number} frameWidthFactor - width of the frame (smallest dimension x frameWidthFactor)
  * @return {Promise<boolean>} True if successful
@@ -151,8 +163,8 @@ const resize = async (files, width = undefined, grayscale = false, output = ".")
  *
  * @param {number} width
  * @param {number} height
- * @param {{printPaperWidth: number, printPaperHeigh: number}} printPaperOptions - information about the printing paper
- * @param {{frameColor: string, imagePosition: {x: number, y: number}}} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
+ * @param {PrintPaperOptionsType} printPaperOptions - information about the printing paper
+ * @param {FrameOptionsType} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
  * @returns an object with top, lef, right, and bottom values
  *
  * @private
@@ -204,7 +216,7 @@ const calculateFrameSizes = (width, height, printPaperOptions, frameWidthFactor)
  * Check passed arguments and return true if they are valid
  *
  * @param {string[]} files - glob, file names
- * @param {{printPaperWidth: number, printPaperHeigh}} printPaperOptions - information about the printing paper
+ * @param {PrintPaperOptionsType} printPaperOptions - information about the printing paper
  * @param {{frameColor: string, imagePosition: {x: number, y: number}}} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
  * @param {string} output - output folder
  * @returns True if arguments are OK
