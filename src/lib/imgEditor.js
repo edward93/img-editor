@@ -14,11 +14,13 @@ import fs from "fs-extra";
  * @property {object} imagePosition - Position of the image
  */
 
+//TODO: add new function that will accept a buffer and return one
+
 /**
  * This function adds a frame around the image to change the aspect ratio. </br>
  * This is helpful when the image you are trying to print has different aspect ratio than the printer paper
  *
- * @param {string[]} files - glob, file names
+ * @param {string[] | Buffer} files - file names or Buffer
  * @param {PrintPaperOptionsType} printPaperOptions - information about the printing paper
  * @param {FrameOptionsType} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
  * @param {string} output - output folder
