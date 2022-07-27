@@ -24,14 +24,15 @@ This is helpful when the image you are trying to print has different aspect rati
 <a name="addFrame"></a>
 
 ## addFrame(files, printPaperOptions, frameOptions, output, frameWidthFactor) ⇒ <code>Promise.&lt;boolean&gt;</code>
-This function adds a frame around the image to change the aspect ratio. </br>This is helpful when the image you are trying to print has different aspect ratio than the printer paper
+This function adds a frame around the image to change the aspect ratio. </br>
+This is helpful when the image you are trying to print has different aspect ratio than the printer paper
 
 **Kind**: global function  
 **Returns**: <code>Promise.&lt;boolean&gt;</code> - True if successful  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| files | <code>Array.&lt;string&gt;</code> |  | glob, file names |
+| files | <code>Array.&lt;string&gt;</code> \| <code>Buffer</code> |  | glob, file names or Buffer |
 | printPaperOptions | [<code>PrintPaperOptionsType</code>](#PrintPaperOptionsType) |  | information about the printing paper |
 | frameOptions | [<code>FrameOptionsType</code>](#FrameOptionsType) |  | information about the frame color and image position with the frame (image position is currently not used) |
 | output | <code>string</code> | <code>&quot;.&quot;</code> | output folder |
