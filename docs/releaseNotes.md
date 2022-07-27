@@ -1,7 +1,7 @@
 # Img Editor
 
 ## v1.1.0 (typescript support)
-- adds typescript support
+- adds typescript support (source files are not converted to 'ts' files yet)
 - documentation fixes
 
 ## v1.0.0
