@@ -25,8 +25,8 @@ npm i @edward1993/img-editor
 ```
 
 ```js
-import { resize } from "@edward1993/img-editor/dist/lib/img-editor";
-import { addFrame } from "@edward1993/img-editor/dist/lib/img-editor";
+import { resize } from "@edward1993/img-editor/dist/lib/imgEditor";
+import { addFrame } from "@edward1993/img-editor/dist/lib/imgEditor";
 ```
 
 ## Usage
