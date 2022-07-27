@@ -55,7 +55,7 @@ Options:
   -f, --files              files or glob                     [string] [required]
   -w, --paperWidth         printing paper width          [number] [default: "4"]
       --paperHeight, --ph  printing paper height         [number] [default: "6"]
-  -c, --frameColor         frame color, i.e. "#fff"     [string] [default: "#fff"]
+  -c, --frameColor         frame color, i.e. "#fff"   [string] [default: "#fff"]
   -o, --output             Output folder                 [string] [default: "."]
   -h, --help               Show help                                   [boolean]
 
