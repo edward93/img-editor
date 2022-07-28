@@ -1,13 +1,14 @@
 # img-editor
 
-![npm (scoped)](https://img.shields.io/npm/v/@edward1993/img-editor?style=flat-square)
-![Build Status](https://github.com/edward93/img-editor/actions/workflows/npm-publish.yml/badge.svg)
+[![npm (scoped)](https://img.shields.io/npm/v/@edward1993/img-editor?style=flat-square)](https://www.npmjs.com/package/@edward1993/img-editor)
+[![Build Status](https://github.com/edward93/img-editor/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/edward93/img-editor/actions/workflows/npm-publish.yml)
+[![CI](https://github.com/edward93/img-editor/actions/workflows/ci.yml/badge.svg)](https://github.com/edward93/img-editor/actions/workflows/ci.yml)
 
-Compact library to edit images
+### Compact library to edit images
 
 _NOTE:_ This tool uses `sharp` for image manipulation. More info <a href="https://github.com/lovell/sharp" target="blank">here</a>
 
-# Announcements!
+## Announcements!
 
 **Typescript** support is here! (v1.1.0)
 
@@ -24,8 +25,8 @@ npm i @edward1993/img-editor
 ```
 
 ```js
-import { resize } from "@edward1993/img-editor/dist/lib/img-editor";
-import { addFrame } from "@edward1993/img-editor/dist/lib/img-editor";
+import { resize } from "@edward1993/img-editor/dist/lib/imgEditor";
+import { addFrame } from "@edward1993/img-editor/dist/lib/imgEditor";
 ```
 
 ## Usage
