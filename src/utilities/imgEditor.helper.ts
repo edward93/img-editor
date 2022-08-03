@@ -155,6 +155,7 @@ export const calculateFrameDimensions = (
   printPaperOptions: PrintPaperOptions,
   frameWidthFactor: number
 ) => {
+  //TODO: simplify this function
   const outputAspectRatio =
     width > height
       ? printPaperOptions.printPaperHeigh / printPaperOptions.printPaperWidth
@@ -165,28 +166,56 @@ export const calculateFrameDimensions = (
     right,
     bottom = 0;
 
-  if (width > height) {
-    // landscape mode
+  // aspect ratio of the input file
+  const inputAspectRatio = width / height;
 
-    const frameWidth = Math.round(height * frameWidthFactor);
-    const outputWidth = (2 * frameWidth + height) * outputAspectRatio;
+  if (width >= height) {
+    // landscape or square mode
+    const frameThickness = Math.round(height * frameWidthFactor);
+    let outputWidth = 0;
+    let outputHeight = 0;
 
+    if (outputAspectRatio >= inputAspectRatio) {
+      // calculate the output height first
+      outputHeight = height + 2 * frameThickness;
+      outputWidth = outputHeight * outputAspectRatio;
+    } else {
+      // calculate the output width first
+      outputWidth = width + 2 * frameThickness;
+      outputHeight = outputWidth / outputAspectRatio;
+    }
     // calculate frame size
-    top = frameWidth;
-    left = Math.round((outputWidth - width) / 2);
-    right = Math.round((outputWidth - width) / 2);
-    bottom = frameWidth;
+    const verticalFrameThickness = Math.round((outputHeight - height) / 2);
+    const horizontalFrameThickness = Math.round((outputWidth - width) / 2);
+
+    top = verticalFrameThickness;
+    left = horizontalFrameThickness;
+    right = horizontalFrameThickness;
+    bottom = verticalFrameThickness;
   } else {
-    // portrait or square mode
+    // portrait
+    const frameThickness = Math.round(width * frameWidthFactor);
 
-    const frameLength = Math.round(width * frameWidthFactor);
-    const outputHeight = (width + 2 * frameLength) / outputAspectRatio;
+    let outputWidth = 0;
+    let outputHeight = 0;
+    if (outputAspectRatio >= inputAspectRatio) {
+      // input image is taller than the output
+      // calculate the output height first
+      outputHeight = height + 2 * frameThickness;
+      outputWidth = outputHeight * outputAspectRatio;
+    } else {
+      // calculate the output width first
+      outputWidth = width + 2 * frameThickness;
+      outputHeight = outputWidth / outputAspectRatio;
+    }
+
+    const horizontalFrameThickness = Math.round((outputWidth - width) / 2);
 
     // calculate frame size
-    top = frameLength;
-    left = frameLength;
-    right = frameLength;
-    bottom = outputHeight - height - frameLength;
+    top = frameThickness;
+    left = horizontalFrameThickness;
+    right = horizontalFrameThickness;
+    bottom = outputHeight - height - frameThickness;
   }
 
   // make sure margins are not negative
