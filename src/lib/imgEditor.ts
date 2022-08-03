@@ -138,6 +138,7 @@ const resize = async (
     } catch (error) {
       // something went wrong
       console.error(error);
+      result.errors.push(error as string);
       result.failed++;
     }
   });
