@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 require = require("esm")(module /*, options*/);
+
+// TODO: migrate to TS
 const glob = require("glob");
 const imgEditor = require("./lib/imgEditor");
 

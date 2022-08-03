@@ -1,7 +1,7 @@
 {
   "source": {
-    "include": ["src/lib", "package.json", "README.md"],
-    "includePattern": ".js$"
+    "include": ["src", "package.json", "README.md"],
+    "includePattern": ".ts$"
   },
   "templates": {
     "cleverLinks": false,
