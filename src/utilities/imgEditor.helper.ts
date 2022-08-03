@@ -1,60 +1,46 @@
 import sharp from "sharp";
 import path from "path";
-import fs from "fs-extra";
+
+import { FrameOptions, PrintPaperOptions, ProcessedImagesInfo } from "../lib/imgEditor.types";
 
 /**
- * @typedef {Object} PrintPaperOptionsType - Information about the printing paper
- * @property {number} printPaperWidth - Width of the printing paper
- * @property {number} printPaperHeigh - Height of the printing paper
- */
-
-/**
- * @typedef {Object} FrameOptionsType - Information about the frame
- * @property {string} frameColor - Width of the printing paper
- * @property {object} imagePosition - Position of the image
- */
-
-//TODO: add new function that will accept a buffer and return one
-
-/**
- * This function adds a frame around the image to change the aspect ratio. </br>
- * This is helpful when the image you are trying to print has different aspect ratio than the printer paper
+ * Adds a frame around the image to change the aspect ratio.
  *
- * @param {string[] | Buffer} files - file names or Buffer
- * @param {PrintPaperOptionsType} printPaperOptions - information about the printing paper
- * @param {FrameOptionsType} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
+ * @param {string[]} input - list of input files
+ * @param {PrintPaperOptions} printPaperOptions - information about the printing paper
+ * @param {FrameOptions} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
  * @param {string} output - output folder
  * @param {number} frameWidthFactor - width of the frame (smallest dimension x frameWidthFactor)
- * @return {Promise<boolean>} True if successful
+ * @returns {Promise<ProcessedImagesInfo>} - Information about the operation
+ *
+ * @private
  */
-const addFrame = async (
-  files,
-  printPaperOptions = { printPaperWidth: 4, printPaperHeigh: 6 },
-  frameOptions = { frameColor: "#fff", imagePosition: { x: 0, y: 0 } },
-  output = ".",
-  frameWidthFactor = 0.05
+export const addFrameFromListOfFiles = async (
+  input: string[],
+  printPaperOptions: PrintPaperOptions,
+  frameOptions: FrameOptions,
+  output: string,
+  frameWidthFactor: number
 ) => {
-  // Validate input arguments
-  if (!checkArguments(files, printPaperOptions, frameOptions, output)) return false;
-
-  // Create the output folder if it doesn't exist
-  if (!fs.existsSync(output)) {
-    fs.mkdirSync(output);
-  }
-
-  const result = { successfullyEdited: 0, failed: 0 };
-
+  const result: ProcessedImagesInfo = { data: [], successful: 0, failed: 0, errors: [] };
   // perform the operation for each file
-  await files.map(async (file) => {
+  await input.map(async (file) => {
     //#region prepping necessary data for processing the image
     // Construct the output file
     const outPath = constructOutputPath(file, output, OPERATION_CODES.addFrame);
 
     // get information about the current file
     const { width, height } = await sharp(file).metadata();
+    if (!width || !height) {
+      const errMsg = "Could not retrieve metadata of the input file";
+      result.errors.push(errMsg);
+      // log
+      console.error(errMsg);
+      return result;
+    }
 
     // get frame measurements
-    const { top, left, right, bottom } = calculateFrameSizes(width, height, printPaperOptions, frameWidthFactor);
+    const { top, left, right, bottom } = calculateFrameDimensions(width, height, printPaperOptions, frameWidthFactor);
     //#endregion
 
     //#region processing the image
@@ -72,94 +58,84 @@ const addFrame = async (
         .toFile(outPath);
 
       console.info(info);
-      result.successfullyEdited++;
-      return true;
+      result.successful++;
+      result.data.push(info);
     } catch (error) {
       // something went wrong
       console.error(error);
       result.failed++;
-      return false;
     }
     //#endregion
   });
 
-  return result.failed === 0;
+  return result;
 };
 
 /**
- * Resizes given file(s) preserving the aspect ratio
+ * Adds a frame around the image to change the aspect ratio.
  *
- * @param {string} files - file or glob
- * @param {number} width - desired output file width
- * @param {boolean} grayscale - if true img will be grayscaled
- * @param {string} output - output folder
- * @returns {Promise<boolean>} true if successful
+ * @param {Buffer} input - Input image buffer
+ * @param {PrintPaperOptions} printPaperOptions - information about the printing paper
+ * @param {FrameOptions} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
+ * @param {number} frameWidthFactor - width of the frame (smallest dimension x frameWidthFactor)
+ * @returns {Promise<ProcessedImagesInfo>} - Information about the operation
+ *
+ * @private
  */
-const resize = async (files, width = undefined, grayscale = false, output = ".") => {
-  //#region argument checking
-  if (!files || (files && files.length === 0)) {
-    console.error("No files found");
-    return false;
+export const addFrameFromBuffer = async (
+  input: Buffer,
+  printPaperOptions: PrintPaperOptions,
+  frameOptions: FrameOptions,
+  frameWidthFactor: number
+): Promise<ProcessedImagesInfo> => {
+  const result: ProcessedImagesInfo = { data: [], successful: 0, failed: 0, errors: [] };
+
+  //#region prepping necessary data for processing the image
+
+  // get information about the current file
+  const { width, height } = await sharp(input).metadata();
+  if (!width || !height) {
+    const errMsg = "Could not retrieve metadata of the input file";
+    result.errors.push(errMsg);
+    // log
+    console.error(errMsg);
+    return result;
   }
 
-  if (width !== undefined && width !== null) {
-    if (isNaN(width)) {
-      console.error("Width must be a valid integer or (null | undefined)");
-      return false;
-    }
-
-    if (width <= 0) {
-      console.error("Width must be a valid integer (gt 0)");
-      return false;
-    }
-  } else if (grayscale === false) {
-    console.error("Either 'width' or 'grayscale' should be defined");
-    return false;
-  }
+  // get frame measurements
+  const { top, left, right, bottom } = calculateFrameDimensions(width, height, printPaperOptions, frameWidthFactor);
   //#endregion
 
-  /** Create the folder if it doesn't exist */
-  if (!fs.existsSync(output)) {
-    fs.mkdirSync(output);
+  //#region processing the image
+  // edit the image
+  try {
+    const { data, info } = await sharp(input)
+      .extend({
+        top,
+        left,
+        right,
+        bottom,
+        background: frameOptions.frameColor,
+      })
+      .withMetadata()
+      .toBuffer({ resolveWithObject: true });
+
+    // log
+    console.info(info);
+
+    // add the processed buffer
+    result.data.push(data);
+    result.successful++;
+  } catch (error) {
+    // something went wrong
+    console.error(error);
+    result.failed++;
   }
 
-  const result = { successfullyEdited: 0, failed: 0 };
-
-  // process each file
-  await files.map(async (file) => {
-    // Construct the output file
-    const outPath = constructOutputPath(file, output, OPERATION_CODES.resize);
-
-    // start construction of the processing command
-    let command = sharp(file);
-
-    // if width arg is provided, resize the image
-    if (width !== undefined && width !== null) {
-      command = command.resize({ width });
-    }
-
-    // if grayscale is provided grayscale the image
-    if (grayscale) {
-      command = command.grayscale();
-    }
-
-    // save to a file
-    try {
-      const info = await command.toFile(outPath);
-      console.info(info);
-      result.successfullyEdited++;
-      return true;
-    } catch (error) {
-      console.error(error);
-      result.failed++;
-      return false;
-    }
-  });
-
-  return result.failed === 0;
+  return result;
+  //#endregion
 };
 
-//#region private/helper methods
 /**
  * Calculates necessary measurements of the frame
  *
@@ -171,7 +147,12 @@ const resize = async (files, width = undefined, grayscale = false, output = ".")
  *
  * @private
  */
-const calculateFrameSizes = (width, height, printPaperOptions, frameWidthFactor) => {
+export const calculateFrameDimensions = (
+  width: number,
+  height: number,
+  printPaperOptions: PrintPaperOptions,
+  frameWidthFactor: number
+) => {
   const outputAspectRatio =
     width > height
       ? printPaperOptions.printPaperHeigh / printPaperOptions.printPaperWidth
@@ -217,7 +198,7 @@ const calculateFrameSizes = (width, height, printPaperOptions, frameWidthFactor)
 /**
  * Check passed arguments and return true if they are valid
  *
- * @param {string[]} files - glob, file names
+ * @param {string[]} input - glob, file names
  * @param {PrintPaperOptionsType} printPaperOptions - information about the printing paper
  * @param {{frameColor: string, imagePosition: {x: number, y: number}}} frameOptions - information about the frame color and image position with the frame (image position is currently not used)
  * @param {string} output - output folder
@@ -225,14 +206,17 @@ const calculateFrameSizes = (width, height, printPaperOptions, frameWidthFactor)
  *
  * @private
  */
-const checkArguments = (
-  files,
-  printPaperOptions = { printPaperWidth: 4, printPaperHeigh: 6 },
-  frameOptions = { frameColor: "#fff", imagePosition: { x: 0, y: 0 } },
-  output = "."
+export const checkArguments = (
+  input: string[] | Buffer,
+  printPaperOptions: PrintPaperOptions = { printPaperWidth: 4, printPaperHeigh: 6 },
+  frameOptions: FrameOptions = { frameColor: "#fff", imagePosition: { x: 0, y: 0 } },
+  output = ".",
+  processResult: ProcessedImagesInfo
 ) => {
-  if (!files || (files && files.length === 0)) {
-    console.error("No files found");
+  if (!input || (input && input.length === 0)) {
+    const errMsg = "No input files found";
+    processResult.errors.push(errMsg);
+    console.error(errMsg);
     return false;
   } else if (
     printPaperOptions.printPaperWidth === undefined ||
@@ -242,6 +226,7 @@ const checkArguments = (
     isNaN(printPaperOptions.printPaperWidth) ||
     isNaN(printPaperOptions.printPaperHeigh)
   ) {
+    processResult.errors.push(`printPaperWidth and printPaperHeight must be specified and valid numbers`);
     console.error(`printPaperWidth and printPaperHeight must be specified and valid numbers`);
     return false;
   } else if (
@@ -249,6 +234,7 @@ const checkArguments = (
     frameOptions.frameColor === null ||
     !new RegExp("^#([a-fA-F0-9]){3}$|[a-fA-F0-9]{6}$").test(frameOptions.frameColor)
   ) {
+    processResult.errors.push("frameColor must be valid hex color string");
     console.error("frameColor must be valid hex color string");
     return false;
   } else return true;
@@ -264,7 +250,7 @@ const checkArguments = (
  *
  * @private
  */
-const constructOutputPath = (file, output, code) => {
+export const constructOutputPath = (file: string, output: string, code: string) => {
   // Construct the output file
   const defaultFilename = `edited-${code}-${new Date().valueOf()}-${path.basename(file)}`;
   const defaultOutputPath = `${path.dirname(file)}/${defaultFilename}`;
@@ -277,10 +263,7 @@ const constructOutputPath = (file, output, code) => {
  *
  * @private
  */
-const OPERATION_CODES = {
+export const OPERATION_CODES = {
   addFrame: "afr",
   resize: "rsz",
 };
-//#endregion
-
-export { addFrame, resize };

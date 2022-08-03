@@ -1,4 +1,8 @@
 # Img Editor
+## v2.0.0 (Major changes)
+- Adds ability to accept buffers
+- Modifies return types of the functions
+- JS -> TS migration
 
 ## v1.1.0 (typescript support)
 - adds typescript support (source files are not converted to 'ts' files yet)

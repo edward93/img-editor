@@ -1,0 +1,8 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/lib/*.ts"],
+  "externalPattern": ["**/node_modules/**", "src/lib/imgEditor.types.ts"],
+  "out": "docs/md/",
+  "name": "img-editor",
+  "plugin": ["typedoc-plugin-markdown"]
+}

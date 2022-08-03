@@ -1,3 +1,5 @@
+img-editor / [Exports](modules.md)
+
 # img-editor
 
 [![npm (scoped)](https://img.shields.io/npm/v/@edward1993/img-editor?style=flat-square)](https://www.npmjs.com/package/@edward1993/img-editor)
@@ -68,7 +70,7 @@ Copyright 2022 - Present
 
 ### Documentation
 
-- API docs [here](docs/md/modules/imgEditor.md)
+- API docs [here](docs/md/modules.md)
 - Release Notes [here](docs/releaseNotes.md)
 
 ## Limitations
