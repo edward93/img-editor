@@ -158,8 +158,8 @@ export const calculateFrameDimensions = (
   //TODO: simplify this function
   const outputAspectRatio =
     width > height
-      ? printPaperOptions.printPaperHeigh / printPaperOptions.printPaperWidth
-      : printPaperOptions.printPaperWidth / printPaperOptions.printPaperHeigh;
+      ? printPaperOptions.printPaperHeight / printPaperOptions.printPaperWidth
+      : printPaperOptions.printPaperWidth / printPaperOptions.printPaperHeight;
 
   let top,
     left,
@@ -239,7 +239,7 @@ export const calculateFrameDimensions = (
  */
 export const checkArguments = (
   input: string[] | Buffer,
-  printPaperOptions: PrintPaperOptions = { printPaperWidth: 4, printPaperHeigh: 6 },
+  printPaperOptions: PrintPaperOptions = { printPaperWidth: 4, printPaperHeight: 6 },
   frameOptions: FrameOptions = { frameColor: "#fff", imagePosition: { x: 0, y: 0 } },
   output = ".",
   processResult: ProcessedImagesInfo
@@ -251,11 +251,11 @@ export const checkArguments = (
     return false;
   } else if (
     printPaperOptions.printPaperWidth === undefined ||
-    printPaperOptions.printPaperHeigh === undefined ||
+    printPaperOptions.printPaperHeight === undefined ||
     printPaperOptions.printPaperWidth === null ||
-    printPaperOptions.printPaperHeigh === null ||
+    printPaperOptions.printPaperHeight === null ||
     isNaN(printPaperOptions.printPaperWidth) ||
-    isNaN(printPaperOptions.printPaperHeigh)
+    isNaN(printPaperOptions.printPaperHeight)
   ) {
     processResult.errors.push(`printPaperWidth and printPaperHeight must be specified and valid numbers`);
     console.error(`printPaperWidth and printPaperHeight must be specified and valid numbers`);

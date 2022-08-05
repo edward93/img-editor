@@ -30,9 +30,9 @@ export type PrintPaperOptions = {
   printPaperWidth: number;
 
   /**
-   * eight of the printing paper
+   * Height of the printing paper
    */
-  printPaperHeigh: number;
+  printPaperHeight: number;
 };
 
 /**
