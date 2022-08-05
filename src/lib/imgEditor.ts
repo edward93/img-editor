@@ -25,7 +25,7 @@ const addFrame = async (
   input: string[] | Buffer,
   printPaperOptions: PrintPaperOptions = {
     printPaperWidth: 4,
-    printPaperHeigh: 6,
+    printPaperHeight: 6,
   },
   frameOptions: FrameOptions = { frameColor: "#fff", imagePosition: { x: 0, y: 0 } },
   output: string = ".",
