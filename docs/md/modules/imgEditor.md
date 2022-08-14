@@ -40,7 +40,7 @@ When buffer is passed as an input this function will return the final, processed
 
 #### Defined in
 
-imgEditor.ts:24
+[imgEditor.ts:24](https://github.com/edward93/img-editor/blob/a3978d5/src/lib/imgEditor.ts#L24)
 
 ___
 
@@ -67,4 +67,4 @@ true if successful
 
 #### Defined in
 
-imgEditor.ts:71
+[imgEditor.ts:71](https://github.com/edward93/img-editor/blob/a3978d5/src/lib/imgEditor.ts#L71)

@@ -102,7 +102,7 @@ if (argv._[0] === "frame") {
       }
       return imgEditor.addFrame(
         files,
-        { printPaperWidth: argv.paperWidth, printPaperHeigh: argv.paperHeight },
+        { printPaperWidth: argv.paperWidth, printPaperHeight: argv.paperHeight },
         { frameColor: argv.frameColor },
         argv.output
       );
