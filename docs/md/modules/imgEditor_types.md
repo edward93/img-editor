@@ -27,7 +27,7 @@ Information about the frame
 
 #### Defined in
 
-imgEditor.types.ts:41
+[imgEditor.types.ts:41](https://github.com/edward93/img-editor/blob/a3978d5/src/lib/imgEditor.types.ts#L41)
 
 ___
 
@@ -41,12 +41,12 @@ Information about the printing paper
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `printPaperHeigh` | `number` | eight of the printing paper |
+| `printPaperHeight` | `number` | Height of the printing paper |
 | `printPaperWidth` | `number` | Width of the printing paper |
 
 #### Defined in
 
-imgEditor.types.ts:26
+[imgEditor.types.ts:26](https://github.com/edward93/img-editor/blob/a3978d5/src/lib/imgEditor.types.ts#L26)
 
 ___
 
@@ -67,4 +67,4 @@ Information about processed images
 
 #### Defined in
 
-imgEditor.types.ts:4
+[imgEditor.types.ts:4](https://github.com/edward93/img-editor/blob/a3978d5/src/lib/imgEditor.types.ts#L4)

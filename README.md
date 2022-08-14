@@ -161,15 +161,8 @@ const result = await addFrame("./input.png");
 // new, updated file will be saved to ./edited-afr-1658894097715-input.png
 ```
 
-**Input** 
-![InputImage](docs/media/LandscapeInput.jpg)
-**Output** 
-![OutputImage](docs/media/LandscapeOutput.jpg)
+![InputImage](/docs/media/img-demo.png)
 
-**Input** 
-![InputImage](docs/media/PortraiInput.jpg)
-**Output** 
-![OutputImage](docs/media/PortraitOutput.jpg)
 
 ## Future Enhancements
 
