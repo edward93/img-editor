@@ -1,6 +1,6 @@
 {
   "name": "@edward1993/img-editor",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Compact image editing library",
   "main": "./dist/lib/imgEditor.js",
   "bin": {

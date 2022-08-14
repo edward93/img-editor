@@ -156,10 +156,15 @@ export const calculateFrameDimensions = (
   frameWidthFactor: number
 ) => {
   //TODO: simplify this function
+
+
+  // TODO: this assumes the orientation of the paper. Should be either the matching dimensions or
+  // ? Max(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth) / Min(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth)
+  // : Min(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth) / Max(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth)
   const outputAspectRatio =
     width > height
-      ? printPaperOptions.printPaperHeight / printPaperOptions.printPaperWidth
-      : printPaperOptions.printPaperWidth / printPaperOptions.printPaperHeight;
+      ? printPaperOptions.printPaperWidth / printPaperOptions.printPaperHeight
+      : printPaperOptions.printPaperHeight / printPaperOptions.printPaperWidth;
 
   let top,
     left,
@@ -239,9 +244,9 @@ export const calculateFrameDimensions = (
  */
 export const checkArguments = (
   input: string[] | Buffer,
-  printPaperOptions: PrintPaperOptions = { printPaperWidth: 4, printPaperHeight: 6 },
-  frameOptions: FrameOptions = { frameColor: "#fff", imagePosition: { x: 0, y: 0 } },
-  output = ".",
+  printPaperOptions: PrintPaperOptions,
+  frameOptions: FrameOptions,
+  output: string,
   processResult: ProcessedImagesInfo
 ) => {
   if (!input || (input && input.length === 0)) {
