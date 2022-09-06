@@ -157,22 +157,22 @@ export const calculateFrameDimensions = (
 ) => {
   //TODO: simplify this function
 
+  // aspect ratio of the input file
+  const inputAspectRatio = width / height;
 
-  // TODO: this assumes the orientation of the paper. Should be either the matching dimensions or
-  // ? Max(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth) / Min(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth)
-  // : Min(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth) / Max(printPaperOptions.printPaperWidth, printPaperOptions.printPaperWidth)
-  const outputAspectRatio =
-    width > height
-      ? printPaperOptions.printPaperWidth / printPaperOptions.printPaperHeight
-      : printPaperOptions.printPaperHeight / printPaperOptions.printPaperWidth;
+  // output aspect ratio
+  let outputAspectRatio = printPaperOptions.printPaperWidth / printPaperOptions.printPaperHeight;
+
+  if (inputAspectRatio >= 1 && outputAspectRatio < 1) {
+    outputAspectRatio = 1 / outputAspectRatio;
+  } else if (inputAspectRatio < 1 && outputAspectRatio >= 1) {
+    outputAspectRatio = 1 / outputAspectRatio;
+  }
 
   let top,
     left,
     right,
     bottom = 0;
-
-  // aspect ratio of the input file
-  const inputAspectRatio = width / height;
 
   if (width >= height) {
     // landscape or square mode
@@ -220,7 +220,7 @@ export const calculateFrameDimensions = (
     top = frameThickness;
     left = horizontalFrameThickness;
     right = horizontalFrameThickness;
-    bottom = outputHeight - height - frameThickness;
+    bottom = Math.round(outputHeight - height - frameThickness);
   }
 
   // make sure margins are not negative
@@ -290,8 +290,7 @@ export const constructOutputPath = (file: string, output: string, code: string) 
   // Construct the output file
   const defaultFilename = `edited-${code}-${new Date().valueOf()}-${path.basename(file)}`;
   const defaultOutputPath = `${path.dirname(file)}/${defaultFilename}`;
-
-  return output ? `${path.dirname(file)}/${output}/${defaultFilename}` : defaultOutputPath;
+  return output ? path.resolve(`${output}/${defaultFilename}`) : defaultOutputPath;
 };
 
 /**
