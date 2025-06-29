@@ -1,6 +1,7 @@
 {
   "name": "@edward1993/img-editor",
   "version": "2.0.2",
+  "type": "module",
   "description": "Compact image editing library",
   "main": "./dist/lib/imgEditor.js",
   "bin": {
@@ -12,9 +13,9 @@
   "scripts": {
     "docs": "npm run gen-docs-md",
     "deploy": "npm publish --access=public",
-    "test": "jest",
-    "test-c": "jest --coverage",
-    "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test-c": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "build": "tsc -p tsconfig.json",
     "gen-docs-md": "typedoc --options typedoc.json",
     "predeploy": "npm run test && npm run build"
   },
@@ -36,25 +37,25 @@
   "homepage": "https://github.com/edward93/img-editor#readme",
   "dependencies": {
     "esm": "^3.2.25",
-    "fs-extra": "^10.1.0",
-    "glob": "^8.0.3",
+    "fs-extra": "^11.3.0",
+    "glob": "^11.0.3",
     "path": "^0.12.7",
-    "sharp": "^0.30.7",
-    "yargs": "^17.5.1"
+    "sharp": "^0.34.2",
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
-    "@types/sharp": "^0.30.4",
-    "@types/yargs": "^17.0.10",
-    "babel-jest": "^28.1.3",
-    "babel-preset-react-app": "^10.0.1",
+    "@jest/globals": "^30.0.3",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.14.2",
+    "@types/yargs": "^17.0.33",
     "copyfiles": "^2.4.1",
-    "jest": "^28.1.3",
-    "jest-environment-jsdom": "^28.1.3",
-    "jest-watch-typeahead": "^2.0.0",
+    "jest": "^30.0.3",
+    "jest-environment-jsdom": "^30.0.2",
+    "jest-watch-typeahead": "^3.0.1",
     "minami": "^1.2.3",
-    "typedoc": "^0.23.10",
+    "ts-jest": "^29.4.0",
+    "typedoc": "^0.28.6",
     "typedoc-plugin-markdown": "^3.13.4",
-    "typescript": "^4.7.4"
+    "typescript": "^5.8.3"
   }
 }

@@ -1,22 +1,14 @@
 import { resize, addFrame } from "../src/lib/imgEditor";
 import fs from "fs-extra";
-
-const mockToFile = jest.fn();
-const mockGrayscale = jest.fn();
-const mockMetadata = jest.fn();
-const mockExtend = jest.fn();
-const mockToBuffer = jest.fn();
-
-jest.mock("sharp", () => () => ({
-  resize: jest.fn().mockImplementation(() => ({
-    toFile: mockToFile,
-    grayscale: mockGrayscale,
-  })),
-  metadata: mockMetadata,
-  toFile: mockToFile,
-  grayscale: mockGrayscale,
-  extend: mockExtend,
-}));
+import { jest } from "@jest/globals";
+import {
+  mockExtend,
+  mockGrayscale,
+  mockMetadata,
+  mockToBuffer,
+  mockToFile,
+  mockWithMetadata,
+} from "./imgEditor.test.helper";
 
 jest.mock("path");
 
@@ -24,7 +16,7 @@ console.error = jest.fn();
 console.info = jest.fn();
 
 beforeEach(() => {
-  jest.resetAllMocks();
+  jest.clearAllMocks();
 });
 
 describe("Image Editor", () => {

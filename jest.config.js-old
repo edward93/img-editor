@@ -1,0 +1,18 @@
+export const coverageReporters = ["json", "html"];
+export const collectCoverageFrom = ["src/lib/imgEditor.js"];
+export const testMatch = ["<rootDir>/tests/**/*{spec,test}.{js,jsx,ts,tsx}"];
+export const testEnvironment = "jest-environment-jsdom";
+export const transform = {
+  // "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+};
+export const transformIgnorePatterns = ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$", "^.+\\.module\\.(css|sass|scss)$"];
+export const modulePaths = [];
+export const moduleNameMapper = {
+  "^react-native$": "react-native-web",
+  "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+};
+export const moduleDirectories = [
+  "node_modules", // This is required
+];
+export const moduleFileExtensions = ["web.js", "js", "web.ts", "ts", "web.tsx", "tsx", "json", "web.jsx", "jsx", "node"];
+export const watchPlugins = ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"];
